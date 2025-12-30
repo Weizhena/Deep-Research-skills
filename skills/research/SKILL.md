@@ -25,9 +25,11 @@ description: 对目标话题进行初步调研，生成调研outline。用于学
 合并所有信息，生成两个文件：
 
 **outline.yaml**（items + 配置）：
-- topic和基础配置
-- items列表（调研对象）
-- execution配置（批量大小等）
+- topic: 调研主题
+- items: 调研对象列表
+- execution:
+  - batch_size: 并行agent数量（默认5）
+  - output_dir: 结果输出目录（默认./results）
 
 **fields.yaml**（字段定义）：
 - 字段分类和定义

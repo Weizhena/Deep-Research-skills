@@ -71,7 +71,8 @@ items:
   - name: "Item1"
     source: "source info"
 execution:
-  batch_size: 5
+  batch_size: 5          # parallel agents (default: 5)
+  output_dir: "./results" # output directory (default: ./results)
 ```
 
 ### fields.yaml
