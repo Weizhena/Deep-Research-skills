@@ -1,31 +1,71 @@
 ---
-description: 将deep调研结果汇总为markdown报告，覆盖所有字段，跳过不确定值。
+description: Summarize deep research results into markdown report, cover all fields, skip uncertain values.
 allowed-tools: Read, Write, Glob, Bash
 ---
 
-# Research Report - 汇总报告
+# Research Report - Summary Report
 
-## 触发方式
+## Trigger
 `/research-report`
 
-## 执行流程
+## Workflow
 
-### Step 1: 定位结果目录
-在当前工作目录查找 `*/outline.yaml`，读取topic和output_dir配置。
+### Step 1: Locate Results Directory
+Find `*/outline.yaml` in current working directory, read topic and output_dir config.
 
-### Step 2: 生成Python转换脚本
-在 `{topic}/` 目录下生成 `generate_report.py`，脚本要求：
-- 读取output_dir下所有JSON
-- 读取fields.yaml获取字段结构
-- 覆盖每个JSON的所有字段值
-- 跳过值包含[不确定]的字段
-- 跳过uncertain字段
-- 生成markdown报告格式：目录（带锚点跳转）+ 详细内容（按字段分类）
-- 保存到 `{topic}/report.md`
+### Step 2: Generate Python Conversion Script
+Generate `generate_report.py` in `{topic}/` directory, script requirements:
+- Read all JSON from output_dir
+- Read fields.yaml to get field structure
+- Cover all field values from each JSON
+- Skip fields with values containing [uncertain]
+- Skip fields listed in uncertain array
+- Generate markdown report format: Table of contents (with anchor links) + Detailed content (by field category)
+- Save to `{topic}/report.md`
 
-### Step 3: 执行脚本
-运行 `python {topic}/generate_report.py`
+#### Script Technical Requirements (Must Follow)
 
-## 输出
-- `{topic}/generate_report.py` - 转换脚本
-- `{topic}/report.md` - 汇总报告
+**1. JSON Structure Compatibility**
+Support two JSON structures:
+- Flat structure: Fields directly at top level `{"name": "xxx", "release_date": "xxx"}`
+- Nested structure: Fields in category sub-dict `{"basic_info": {"name": "xxx"}, "technical_features": {...}}`
+
+Field lookup order: Top level -> category mapping key -> Traverse all nested dicts
+
+**2. Category Multi-language Mapping**
+fields.yaml category names and JSON keys can be any combination (CN-CN, CN-EN, EN-CN, EN-EN). Must establish bidirectional mapping:
+```python
+CATEGORY_MAPPING = {
+    "Basic Info": ["basic_info", "Basic Info"],
+    "Technical Features": ["technical_features", "technical_characteristics", "Technical Features"],
+    "Performance Metrics": ["performance_metrics", "performance", "Performance Metrics"],
+    "Milestone Significance": ["milestone_significance", "milestones", "Milestone Significance"],
+    "Business Info": ["business_info", "commercial_info", "Business Info"],
+    "Competition & Ecosystem": ["competition_ecosystem", "competition", "Competition & Ecosystem"],
+    "History": ["history", "History"],
+    "Market Positioning": ["market_positioning", "market", "Market Positioning"],
+}
+```
+
+**3. Complex Value Formatting**
+- list of dicts (e.g., key_events, funding_history): Format each dict as one line, separate kv with ` | `
+- Normal list: Short lists joined with comma, long lists displayed with line breaks
+- Nested dict: Recursive formatting, display with semicolon or line breaks
+
+**4. Extra Fields Collection**
+Collect fields that exist in JSON but not defined in fields.yaml, put in "Other Info" category. Note to filter:
+- Internal fields: `_source_file`, `uncertain`
+- Nested structure top-level keys: `basic_info`, `technical_features` etc.
+
+**5. Uncertain Value Skipping**
+Skip conditions:
+- Field value contains `[uncertain]` string
+- Field name is in `uncertain` array
+- Field value is None or empty string
+
+### Step 3: Execute Script
+Run `python {topic}/generate_report.py`
+
+## Output
+- `{topic}/generate_report.py` - Conversion script
+- `{topic}/report.md` - Summary report
