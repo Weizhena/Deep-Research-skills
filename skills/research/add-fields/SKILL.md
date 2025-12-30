@@ -10,8 +10,8 @@ allowed-tools: Bash, Read, Write, Glob, WebSearch, Task, AskUserQuestion
 
 ## 执行流程
 
-### Step 1: 自动定位Outline
-在当前工作目录查找 `*_outline.yaml` 文件，自动读取现有fields定义。
+### Step 1: 自动定位Fields文件
+在当前工作目录查找 `*/fields.yaml` 文件，自动读取现有fields定义。
 
 ### Step 2: 获取补充来源
 询问用户选择：
@@ -24,7 +24,7 @@ allowed-tools: Bash, Read, Write, Glob, WebSearch, Task, AskUserQuestion
 - 用户指定字段分类和detail_level
 
 ### Step 4: 保存更新
-将确认的字段追加到outline，保存文件。
+将确认的字段追加到fields.yaml，保存文件。
 
 ## 输出
-更新后的outline文件（原地修改，需用户确认）
+更新后的 `{topic}/fields.yaml` 文件（原地修改，需用户确认）

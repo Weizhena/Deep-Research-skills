@@ -36,14 +36,15 @@ cp -r skills/* ~/.claude/skills/
 ```
 - Uses model knowledge + web search
 - Asks for existing field definitions
-- Outputs `{topic}_outline.yaml` in current directory
+- Creates `{topic}/` directory with separated files
 
 ### Phase 2: Deep Research
 ```
 /research/deep
 ```
-- Reads outline automatically from current directory
+- Reads outline and fields automatically from current directory
 - Launches parallel agents (5 per batch)
+- Agents read fields.yaml independently (not passed in prompt)
 - Outputs structured JSON per item
 - Supports resume from checkpoint
 
@@ -55,19 +56,30 @@ cp -r skills/* ~/.claude/skills/
 
 ## Output Format
 
-### Outline (YAML)
+### Directory Structure
+```
+{topic}/
+  ├── outline.yaml    # items + execution config
+  ├── fields.yaml     # field definitions
+  └── results/        # deep research outputs
+```
+
+### outline.yaml
 ```yaml
 topic: "your topic"
 items:
   - name: "Item1"
     source: "source info"
-fields:
-  basic_info:
-    - name: "field_name"
-      description: "field description"
-      detail_level: "detailed|brief"
 execution:
   batch_size: 5
+```
+
+### fields.yaml
+```yaml
+basic_info:
+  - name: "field_name"
+    description: "field description"
+    detail_level: "detailed|brief"
 ```
 
 ### Research Result (JSON)

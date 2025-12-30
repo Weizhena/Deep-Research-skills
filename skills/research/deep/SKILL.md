@@ -11,7 +11,7 @@ allowed-tools: Bash, Read, Write, Glob, WebSearch, Task
 ## 执行流程
 
 ### Step 1: 自动定位Outline
-在当前工作目录查找 `*_outline.yaml` 文件，读取items列表、fields定义、execution配置。
+在当前工作目录查找 `*/outline.yaml` 文件，读取items列表、execution配置。同时读取同目录下的 `fields.yaml` 获取字段定义。
 
 ### Step 2: 断点续传检查
 - 检查output_dir下已完成的JSON文件
@@ -20,7 +20,9 @@ allowed-tools: Bash, Read, Write, Glob, WebSearch, Task
 ### Step 3: 分批执行
 - 按batch_size分批（默认5个）
 - 每个item启动1个web-search-agent（后台并行，禁用task output）
-- 每个agent读取outline获取字段定义
+- **硬约束**：仅传入item相关信息和输出路径
+- **硬约束**：agent必须自行读取 `{topic}/fields.yaml` 获取字段定义
+- **硬约束**：禁止在prompt中直接嵌入字段定义
 - 输出结构化JSON到output_dir
 
 ### Step 4: 等待与监控
