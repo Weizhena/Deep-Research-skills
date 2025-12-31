@@ -1,140 +1,143 @@
 ---
 allowed-tools: Read, Write, Glob, WebSearch, Task, AskUserQuestion
-description: Conduct preliminary research on a topic and generate a research outline. Use for academic research, benchmark research, technology selection, etc.
+description: 对目标话题进行初步调研，生成调研outline。用于学术调研、benchmark调研、技术选型等场景。
 ---
 
-# Research Skill - Preliminary Research
+# Research Skill - 初步调研
 
-## Trigger
+## 触发方式
 `/research <topic>`
 
-## Workflow
+## 执行流程
 
-### Step 1: Generate Initial Framework from Model Knowledge
-Based on the topic, use model's existing knowledge to generate:
-- Main research objects/items list in this domain
-- Suggested research field framework
+### Step 1: 模型内部知识生成初步框架
+基于topic，利用模型已有知识生成：
+- 该领域的主要研究对象/items列表
+- 建议的调研字段框架
 
-Output {step1_output}.
+输出{step1_output}，使用AskUserQuestion确认：
+- items列表是否需要增减？
+- 字段框架是否满足需求？
 
-### Step 2: Web Search Supplement
-Use AskUserQuestion to ask for time range (e.g., last 6 months, since 2024, unlimited).
+### Step 2: Web Search补充
+使用AskUserQuestion询问时间范围（如：最近6个月、2024年至今、不限）。
 
-**Parameter Retrieval**:
-- `{topic}`: User input research topic
-- `{YYYY-MM-DD}`: Current date
-- `{step1_output}`: Complete output from Step 1
-- `{time_range}`: User specified time range
+**参数获取**：
+- `{topic}`: 用户输入的调研话题
+- `{YYYY-MM-DD}`: 当前日期
+- `{step1_output}`: Step 1生成的完整输出内容
+- `{time_range}`: 用户指定的时间范围
 
-**Hard Constraint**: The following prompt must be strictly reproduced, only replacing variables in {xxx}, do not modify structure or wording.
+**硬约束**：以下prompt必须严格复述，仅替换{xxx}中的变量，禁止改写结构或措辞。
 
-Launch 1 web-search-agent (background), **Prompt Template**:
+启动1个web-search-agent（后台），**Prompt模板**：
 ```python
-prompt = f"""## Task
-Research topic: {topic}
-Current date: {YYYY-MM-DD}
+prompt = f"""## 任务
+调研话题: {topic}
+当前日期: {YYYY-MM-DD}
 
-Based on the following initial framework, supplement latest items and recommended research fields.
+基于以下初步框架，补充最新items和推荐调研字段。
 
-## Existing Framework
+## 已有框架
 {step1_output}
 
-## Goals
-1. Verify if existing items are missing important objects
-2. Supplement items based on missing objects
-3. Continue searching for {topic} related items within {time_range} and supplement
-4. Supplement new fields
+## 目标
+1. 验证已有items是否遗漏重要对象
+2. 根据遗漏对象进行补充items
+3. 继续搜索{topic}相关且{time_range}内的items并补充
+4. 补充新fields
 
-## Output Requirements
-Return structured results directly (do not write files):
+## 输出要求
+直接返回结构化结果（不写文件）：
 
-### Supplementary Items
-- item_name: Brief explanation (why it should be added)
+### 补充Items
+- item_name: 简要说明（为什么应该加入）
 ...
 
-### Recommended Supplementary Fields
-- field_name: Field description (why this dimension is needed)
+### 推荐补充字段
+- field_name: 字段描述（为什么需要这个维度）
 ...
 
-### Sources
-- [Source1](url1)
-- [Source2](url2)
+### 信息来源
+- [来源1](url1)
+- [来源2](url2)
 """
 ```
 
-**One-shot Example** (assuming researching AI Coding History):
+**One-shot示例**（假设调研AI Coding发展史）：
 ```
-## Task
-Research topic: AI Coding History
-Current date: 2025-12-30
+## 任务
+调研话题: AI Coding 发展史
+当前日期: 2025-12-30
 
-Based on the following initial framework, supplement latest items and recommended research fields.
+基于以下初步框架，补充最新items和推荐调研字段。
 
-## Existing Framework
-### Items List
-1. GitHub Copilot: Developed by Microsoft/GitHub, first mainstream AI coding assistant
-2. Cursor: AI-first IDE, based on VSCode
+## 已有框架
+### Items列表
+1. GitHub Copilot: Microsoft/GitHub开发，首个主流AI编程助手
+2. Cursor: AI-first IDE，基于VSCode
 ...
 
-### Field Framework
-- Basic Info: name, release_date, company
-- Technical Features: underlying_model, context_window
+### 字段框架
+- 基本信息: name, release_date, company
+- 技术特性: underlying_model, context_window
 ...
 
-## Goals
-1. Verify if existing items are missing important objects
-2. Supplement items based on missing objects
-3. Continue searching for AI Coding History related items within since 2024 and supplement
-4. Supplement new fields
+## 目标
+1. 验证已有items是否遗漏重要对象
+2. 根据遗漏对象进行补充items
+3. 继续搜索AI Coding 发展史相关且2024年至今内的items并补充
+4. 补充新fields
 
-## Output Requirements
-Return structured results directly (do not write files):
+## 输出要求
+直接返回结构化结果（不写文件）：
 
-### Supplementary Items
-- item_name: Brief explanation (why it should be added)
+### 补充Items
+- item_name: 简要说明（为什么应该加入）
 ...
 
-### Recommended Supplementary Fields
-- field_name: Field description (why this dimension is needed)
+### 推荐补充字段
+- field_name: 字段描述（为什么需要这个维度）
 ...
 
-### Sources
-- [Source1](url1)
-- [Source2](url2)
+### 信息来源
+- [来源1](url1)
+- [来源2](url2)
 ```
 
-### Step 3: Ask User for Existing Fields
-Use AskUserQuestion to ask if user has existing field definition file, if so read and merge.
+### Step 3: 询问用户已有字段
+使用AskUserQuestion询问用户是否有已定义的字段文件，如有则读取并合并。
 
-### Step 4: Generate Outline (Separate Files)
-Merge {step1_output}, {step2_output} and user's existing fields, generate two files:
+### Step 4: 生成Outline（分离文件）
+合并{step1_output}、{step2_output}和用户已有字段，生成两个文件：
 
-**outline.yaml** (items + config):
-- topic: Research topic
-- items: Research objects list
+**outline.yaml**（items + 配置）：
+- topic: 调研主题
+- items: 调研对象列表
 - execution:
-  - batch_size: Number of parallel agents (confirm with AskUserQuestion)
-  - items_per_agent: Items per agent (confirm with AskUserQuestion)
-  - output_dir: Results output directory (default: ./results)
+  - batch_size: 并行agent数量（需AskUserQuestion确认）
+  - items_per_agent: 每个agent调研项目数（需AskUserQuestion确认）
+  - output_dir: 结果输出目录（默认./results）
 
-**fields.yaml** (field definitions):
-- Field categories and definitions
-- Each field's name, description, detail_level
-- uncertain: Uncertain fields list (reserved field, auto-filled in deep phase)
+**fields.yaml**（字段定义）：
+- 字段分类和定义
+- 每个字段的name、description、detail_level
+- detail_level分层：极简 → 简要 → 详细
+- uncertain: 不确定字段列表（保留字段，deep阶段自动填充）
 
-### Step 5: Output and Confirm
-- Create directory: `./{topic_slug}/`
-- Save: `outline.yaml` and `fields.yaml`
-- Show to user for confirmation
+### Step 5: 输出并确认
+- 创建目录: `./{topic_slug}/`
+- 保存: `outline.yaml` 和 `fields.yaml`
+- 展示给用户确认
 
-## Output Path
+## 输出路径
 ```
-{current_working_directory}/{topic_slug}/
-  ├── outline.yaml    # items list + execution config
-  └── fields.yaml     # field definitions
+{当前工作目录}/{topic_slug}/
+  ├── outline.yaml    # items列表 + execution配置
+  └── fields.yaml     # 字段定义
 ```
 
-## Follow-up Commands
-- `/research-add-items` - Supplement items
-- `/research-add-fields` - Supplement fields
-- `/research-deep` - Start deep research
+## 后续命令
+- `/research-add-items` - 补充items
+- `/research-add-fields` - 补充字段
+- `/research-deep` - 开始深度调研
