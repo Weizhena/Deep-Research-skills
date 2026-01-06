@@ -37,50 +37,31 @@ cp agents/web-search-agent.md ~/.claude/agents/
 
 ## Workflow & Example
 
-> Example: Researching "AI Agent Demo 2025"
+> **Example**: Researching "AI Agent Demo 2025"
 
 ### Phase 1: Generate Outline
 ```
 run /research AI Agent Demo 2025
 ```
-**Output:** `ai-agent-demo/outline.yaml`
-```yaml
-topic: "AI Agent Demo & Review (2025.9-2025.12)"
-items:
-  - name: "ChatGPT Agent"
-    category: "Browser Agent"
-    brief: "OpenAI unified Agent, released July 2025"
-  - name: "Claude Computer Use"
-    category: "Desktop Agent"
-    brief: "Anthropic desktop control Agent"
-  # ... 15 more items
-```
+💡 **What happens**: Tell it your topic → It creates a research list for you
+
+**You get**: A list of 17 AI Agents to research (ChatGPT Agent, Claude Computer Use, Cursor, etc.) + what info to collect for each
 
 ### Phase 2: Deep Research
 ```
 run /research/deep
 ```
-**Output:** `ai-agent-demo/results/ChatGPT_Agent.json`
-```json
-{
-  "basic_info": {
-    "name": "ChatGPT Agent",
-    "company": "OpenAI",
-    "release_date": "2025-07-17",
-    "pricing": "Pro $200/mo, Plus $20/mo"
-  },
-  "tech_specs": {
-    "underlying_model": "GPT-5 series",
-    "agent_type": "Unified autonomous Agent"
-  }
-}
-```
+💡 **What happens**: AI automatically searches the web for each item, one by one
+
+**You get**: Detailed info for each Agent (company, release date, pricing, tech specs, reviews...)
 
 ### Phase 3: Generate Report
 ```
 run /research/report
 ```
-**Output:** `ai-agent-demo/report.md` - Markdown report with TOC and all items
+💡 **What happens**: All data → One organized report
+
+**You get**: `report.md` - A complete markdown report with table of contents, ready to read or share
 
 ## References
 

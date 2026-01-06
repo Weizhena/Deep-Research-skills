@@ -37,50 +37,31 @@ cp agents/web-search-agent.md ~/.claude/agents/
 
 ## 工作流 & 示例
 
-> 示例：调研 "AI Agent Demo 2025"
+> **示例**：调研 "AI Agent Demo 2025"
 
 ### 阶段1：生成Outline
 ```
 run /research AI Agent Demo 2025
 ```
-**输出：** `ai-agent-demo/outline.yaml`
-```yaml
-topic: "AI Agent Demo & 测评 (2025.9-2025.12)"
-items:
-  - name: "ChatGPT Agent"
-    category: "浏览器Agent"
-    brief: "OpenAI统一Agent，2025年7月发布"
-  - name: "Claude Computer Use"
-    category: "桌面Agent"
-    brief: "Anthropic桌面操控Agent"
-  # ... 另外15个items
-```
+💡 **发生了什么**：告诉它你要研究什么 → 它帮你列出调研清单
+
+**你会得到**：17个待调研的AI Agent清单（ChatGPT Agent、Claude Computer Use、Cursor等）+ 每个要收集哪些信息
 
 ### 阶段2：深度调研
 ```
 run /research/deep
 ```
-**输出：** `ai-agent-demo/results/ChatGPT_Agent.json`
-```json
-{
-  "basic_info": {
-    "name": "ChatGPT Agent",
-    "company": "OpenAI",
-    "release_date": "2025-07-17",
-    "pricing": "Pro $200/月, Plus $20/月"
-  },
-  "tech_specs": {
-    "underlying_model": "GPT-5系列",
-    "agent_type": "统一型自主Agent"
-  }
-}
-```
+💡 **发生了什么**：AI自动上网搜索每个item的详细信息，逐个完成
+
+**你会得到**：每个Agent的详细资料（公司、发布日期、定价、技术规格、用户评价...）
 
 ### 阶段3：生成报告
 ```
 run /research/report
 ```
-**输出：** `ai-agent-demo/report.md` - 带目录和所有item的Markdown报告
+💡 **发生了什么**：所有数据 → 一份整理好的报告
+
+**你会得到**：`report.md` - 带目录的完整Markdown报告，可直接阅读或分享
 
 ## 参考文献
 
