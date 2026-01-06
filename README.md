@@ -17,17 +17,6 @@ A structured research workflow skill for Claude Code, supporting two-phase resea
 - **Market Research**: Competitor analysis, industry trends, product comparison
 - **Due Diligence**: Company research, investment analysis, risk assessment
 
-### Commands
-
-> **Note**: Use `run /research` instead of `/research` directly, as slash commands conflict with built-in commands.
-
-| Command | Description |
-|---------|-------------|
-| `run /research` | Generate research outline with items and fields |
-| `run /research/add-items` | Add more items to existing outline |
-| `run /research/add-fields` | Add more fields to existing outline |
-| `run /research/deep` | Deep research each item with parallel agents |
-| `run /research/report` | Generate markdown report from JSON results |
 
 ### Installation
 
@@ -43,6 +32,9 @@ cp -r skills/research-zh ~/.claude/commands/research
 # Required: Install agent
 cp agents/web-search-agent.md ~/.claude/agents/
 ```
+### Commands
+
+> **Note**: Use `run /research` instead of `/research` directly, as slash commands conflict with built-in commands.
 
 ### Workflow
 
@@ -94,17 +86,7 @@ Claude Code 的结构化调研工作流技能，支持两阶段调研：outline�
 - **市场研究**：竞品分析、行业趋势、产品比较
 - **尽职调查**：公司研究、投资分析、风险评估
 
-### 命令
 
-> **注意**：使用 `run /research` 而非直接 `/research`，因为斜杠命令与内置命令冲突。
-
-| 命令 | 描述 |
-|------|------|
-| `run /research` | 生成包含items和fields的调研outline |
-| `run /research/add-items` | 向现有outline添加更多items |
-| `run /research/add-fields` | 向现有outline添加更多fields |
-| `run /research/deep` | 使用并行agents对每个item进行深度调研 |
-| `run /research/report` | 从JSON结果生成markdown报告 |
 
 ### 安装
 
@@ -120,6 +102,9 @@ cp -r skills/research-zh ~/.claude/skills/research
 # 必需：安装agent
 cp agents/web-search-agent.md ~/.claude/agents/
 ```
+### 命令
+
+> **注意**：使用 `run /research` 而非直接 `/research`，因为斜杠命令与内置命令冲突。
 
 ### 工作流
 
