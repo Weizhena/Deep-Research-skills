@@ -51,7 +51,7 @@ pip install pyyaml
 ```
 /research AI Agent Demo 2025
 ```
-💡 **发生了什么**：告诉它你要研究什么 → 它帮你列出调研清单
+💡 **会发生什么**：告诉它你要研究什么 → 它帮你列出调研清单
 
 **你会得到**：17个待调研的AI Agent清单（ChatGPT Agent、Claude Computer Use、Cursor等）+ 每个要收集哪些信息
 
@@ -60,13 +60,13 @@ pip install pyyaml
 /research-add-items
 /research-add-fields
 ```
-💡 **发生了什么**：补充更多调研对象或字段定义
+💡 **会发生什么**：补充更多调研对象或字段定义
 
 ### 阶段2：深度调研
 ```
 /research-deep
 ```
-💡 **发生了什么**：AI自动上网搜索每个item的详细信息，逐个完成
+💡 **会发生什么**：AI自动上网搜索每个item的详细信息，逐个完成
 
 **你会得到**：每个Agent的详细资料（公司、发布日期、定价、技术规格、用户评价...）
 
@@ -74,7 +74,7 @@ pip install pyyaml
 ```
 /research-report
 ```
-💡 **发生了什么**：所有数据 → 一份整理好的报告
+💡 **会发生什么**：所有数据 → 一份整理好的报告
 
 **你会得到**：`report.md` - 带目录的完整Markdown报告，可直接阅读或分享
 
