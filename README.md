@@ -51,7 +51,7 @@ pip install pyyaml
 ```
 /research AI Agent Demo 2025
 ```
-💡 **What happens**: Tell it your topic → It creates a research list for you
+💡 **What will happen**: Tell it your topic → It creates a research list for you
 
 **You get**: A list of 17 AI Agents to research (ChatGPT Agent, Claude Computer Use, Cursor, etc.) + what info to collect for each
 
@@ -60,13 +60,13 @@ pip install pyyaml
 /research-add-items
 /research-add-fields
 ```
-💡 **What happens**: Add more research items or field definitions
+💡 **What will happen**: Add more research items or field definitions
 
 ### Phase 2: Deep Research
 ```
 /research-deep
 ```
-💡 **What happens**: AI automatically searches the web for each item, one by one
+💡 **What will happen**: AI automatically searches the web for each item, one by one
 
 **You get**: Detailed info for each Agent (company, release date, pricing, tech specs, reviews...)
 
@@ -74,7 +74,7 @@ pip install pyyaml
 ```
 /research-report
 ```
-💡 **What happens**: All data → One organized report
+💡 **What will happen**: All data → One organized report
 
 **You get**: `report.md` - A complete markdown report with table of contents, ready to read or share
 
