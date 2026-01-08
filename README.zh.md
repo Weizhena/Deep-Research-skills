@@ -38,8 +38,8 @@ pip install pyyaml
 | 命令 (2.1.0+) | 描述 |
 |---------------|------|
 | `/research` | 生成包含items和fields的调研outline |
-| `/research-add-items` | 向现有outline添加更多items |
-| `/research-add-fields` | 向现有outline添加更多fields |
+| `/research-add-items` | 向现有outline添加更多调研对象 |
+| `/research-add-fields` | 向现有outline添加更多字段定义 |
 | `/research-deep` | 使用并行agents对每个item进行深度调研 |
 | `/research-report` | 从JSON结果生成markdown报告 |
 

@@ -38,8 +38,8 @@ pip install pyyaml
 | Command (2.1.0+) | Description |
 |------------------|-------------|
 | `/research` | Generate research outline with items and fields |
-| `/research-add-items` | Add more items to existing outline |
-| `/research-add-fields` | Add more fields to existing outline |
+| `/research-add-items` | Add more research items to existing outline |
+| `/research-add-fields` | Add more field definitions to existing outline |
 | `/research-deep` | Deep research each item with parallel agents |
 | `/research-report` | Generate markdown report from JSON results |
 
