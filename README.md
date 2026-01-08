@@ -17,10 +17,10 @@ A structured research workflow skill for Claude Code, supporting two-phase resea
 
 ```bash
 # English version
-cp -r skills/research-en ~/.claude/skills/research
+cp -r skills/research-en/* ~/.claude/skills/
 
 # Chinese version
-cp -r skills/research-zh ~/.claude/skills/research
+cp -r skills/research-zh/* ~/.claude/skills/
 
 # Required: Install agent
 cp agents/web-search-agent.md ~/.claude/agents/
@@ -31,17 +31,17 @@ pip install pyyaml
 
 ## Commands
 
-> **Claude Code 2.1.0+**: Direct `/research` trigger is now supported!
+> **Claude Code 2.1.0+**: Direct `/skill-name` trigger is now supported!
 >
-> **Older versions**: Use `run /research` format instead.
+> **Older versions**: Use `run /skill-name` format instead.
 
-| Command (2.1.0+) | Command (older) | Description |
-|------------------|-----------------|-------------|
-| `/research` | `run /research` | Generate research outline with items and fields |
-| `/research:add-items` | `run /research/add-items` | Add more items to existing outline |
-| `/research:add-fields` | `run /research/add-fields` | Add more fields to existing outline |
-| `/research:deep` | `run /research/deep` | Deep research each item with parallel agents |
-| `/research:report` | `run /research/report` | Generate markdown report from JSON results |
+| Command (2.1.0+) | Description |
+|------------------|-------------|
+| `/research` | Generate research outline with items and fields |
+| `/research-add-items` | Add more items to existing outline |
+| `/research-add-fields` | Add more fields to existing outline |
+| `/research-deep` | Deep research each item with parallel agents |
+| `/research-report` | Generate markdown report from JSON results |
 
 ## Workflow & Example
 
@@ -51,25 +51,22 @@ pip install pyyaml
 ```
 /research AI Agent Demo 2025
 ```
-> *Older versions: `run /research AI Agent Demo 2025`*
 💡 **What happens**: Tell it your topic → It creates a research list for you
 
 **You get**: A list of 17 AI Agents to research (ChatGPT Agent, Claude Computer Use, Cursor, etc.) + what info to collect for each
 
 ### Phase 2: Deep Research
 ```
-/research:deep
+/research-deep
 ```
-> *Older versions: `run /research/deep`*
 💡 **What happens**: AI automatically searches the web for each item, one by one
 
 **You get**: Detailed info for each Agent (company, release date, pricing, tech specs, reviews...)
 
 ### Phase 3: Generate Report
 ```
-/research:report
+/research-report
 ```
-> *Older versions: `run /research/report`*
 💡 **What happens**: All data → One organized report
 
 **You get**: `report.md` - A complete markdown report with table of contents, ready to read or share
