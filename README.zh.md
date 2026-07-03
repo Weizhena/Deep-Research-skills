@@ -1,4 +1,4 @@
-# Deep Research Skill for Claude Code / OpenCode / Codex
+# Deep Research Skill for Claude Code / OpenCode / Codex / Autohand Code
 
 [English](README.md) | [中文](README.zh.md)
 
@@ -6,7 +6,7 @@
 
 > 灵感来源：[RhinoInsight: Improving Deep Research through Control Mechanisms for Model Behavior and Context](https://arxiv.org/abs/2511.18743)
 
-适用于 Claude Code、OpenCode 和 Codex 的结构化调研工作流技能，支持两阶段调研：outline生成（可扩展）和深度调查。人在回路设计确保每个阶段的精确控制。
+适用于 Claude Code、OpenCode、Codex 和 Autohand Code 的结构化调研工作流技能，支持两阶段调研：outline生成（可扩展）和深度调查。人在回路设计确保每个阶段的精确控制。
 
 ![Deep Research Skills 工作流](workflow.png)
 
@@ -62,6 +62,16 @@ pip install pyyaml
 
 > **重要**：在 OpenCode 中，任何模型要想使用 `websearch`，需要设置 `OPENCODE_ENABLE_EXA=1`。单纯 `export` 只对当前 shell 生效；写入 `~/.bashrc` 后才是永久生效。不设置时，只有 `web fetch`，对深度调研阶段会弱很多。
 
+### Autohand Code
+
+从 Autohand Community Skills registry 安装：
+
+```text
+$skill-installer deep-research-skills
+```
+
+这个 registry 条目会把本项目的 deep research 工作流适配到 Autohand Code，用户无需 clone 本仓库即可按名称安装。
+
 ### Codex
 ```bash
 # 英文版
@@ -108,6 +118,8 @@ config_file = "agents/web-researcher.toml"
 > **Claude Code 2.1.0+**：现已支持直接 `/skill-name` 触发！
 >
 > **旧版本**：请使用 `run /skill-name` 格式。
+>
+> **Autohand Code**：使用 `$skill-installer deep-research-skills` 安装后，可以用自然语言要求生成 deep research outline、补充 items/fields、执行 deep research 或生成最终报告。
 >
 > **Codex**：可以通过 `/skills` -> `List Skills` 选择这些 skills，也可以用自然语言触发，例如 `Use the research skill to build an outline for AI Agent Demo 2025`。
 

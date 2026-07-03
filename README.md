@@ -1,4 +1,4 @@
-# Deep Research Skill for Claude Code / OpenCode / Codex
+# Deep Research Skill for Claude Code / OpenCode / Codex / Autohand Code
 
 [English](README.md) | [中文](README.zh.md)
 
@@ -6,7 +6,7 @@
 
 > Inspired by [RhinoInsight: Improving Deep Research through Control Mechanisms for Model Behavior and Context](https://arxiv.org/abs/2511.18743)
 
-A structured research workflow skill for Claude Code, OpenCode, and Codex, supporting two-phase research: outline generation (extensible) and deep investigation. Human-in-the-loop design ensures precise control at every stage.
+A structured research workflow skill for Claude Code, OpenCode, Codex, and Autohand Code, supporting two-phase research: outline generation (extensible) and deep investigation. Human-in-the-loop design ensures precise control at every stage.
 
 ![Deep Research Skills Workflow](workflow.png)
 
@@ -62,6 +62,16 @@ pip install pyyaml
 
 > **Important**: In OpenCode, ANY model's websearch requires `OPENCODE_ENABLE_EXA=1`. A plain `export` only affects the current shell; writing it to `~/.bashrc` makes it persistent. Without it, you only get `web fetch`, which is weaker for the deep research phase.
 
+### Autohand Code
+
+Install from the Autohand Community Skills registry:
+
+```text
+$skill-installer deep-research-skills
+```
+
+The registry entry adapts this deep research workflow for Autohand Code so users can install it by name without cloning this repository.
+
 ### Codex
 ```bash
 # English version
@@ -108,6 +118,8 @@ config_file = "agents/web-researcher.toml"
 > **Claude Code 2.1.0+**: Direct `/skill-name` trigger is now supported!
 >
 > **Older versions**: Use `run /skill-name` format instead.
+>
+> **Autohand Code**: Install with `$skill-installer deep-research-skills`, then ask naturally for a deep research outline, item expansion, deep research run, or final report.
 >
 > **Codex**: You can trigger these skills from `/skills` -> `List Skills`, or ask naturally, for example `Use the research skill to build an outline for AI Agent Demo 2025`.
 
