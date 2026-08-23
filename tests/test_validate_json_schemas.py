@@ -2,21 +2,22 @@
 # -*- coding: utf-8 -*-
 """Regression test for skills/*/research/validate_json.py.
 
-Guards two bugs that made the validator pass vacuously (a "green" that means nothing):
-  1. Only the `field_categories:` schema was parsed. But /research emits fields.yaml as
-     `fields: {<category>: [{name, description, detail_level}]}`, which was read as ZERO
-     fields -> coverage defaulted to 100% -> every JSON "passed".
-  2. `required` defaulted to False, so `valid` (== no missing required) was True even when
-     fields were missing.
+The validator accepts EXACTLY ONE schema — the one /research actually emits:
 
-After the fix, the loader accepts the `field_categories`, `fields:{cat:[...]}` and flat
-`fields:[...]` shapes (plus a generic fallback), and treats every field as required when no
-explicit `required:` marker is present. A JSON missing a defined field now actually FAILS.
+    fields:
+      <category>:
+        - {name: ..., description: ..., detail_level: ...}
+    uncertain: []
+
+Any other shape must be rejected (exit 1), never silently pass with zero fields.
+With no explicit `required:` markers, every field is required so incomplete coverage
+actually fails. With explicit markers, opt-in semantics are preserved.
 
 Run:  python tests/test_validate_json_schemas.py   (exit 0 = all pass)
 """
 import importlib.util
 import json
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -25,16 +26,8 @@ ROOT = Path(__file__).resolve().parents[1]
 COPIES = sorted(ROOT.glob("skills/*/research/validate_json.py"))
 
 tmp = Path(tempfile.mkdtemp())
-# Schema A: field_categories + explicit `required` (one optional field 'notes')
-(tmp / "A.yaml").write_text(
-    "field_categories:\n"
-    "  - category: basic\n"
-    "    fields:\n"
-    "      - {name: a, required: true}\n"
-    "      - {name: b, required: true}\n"
-    "      - {name: notes, required: false}\n", encoding="utf-8")
-# Schema B: nested fields:{category:[...]} with detail_level, NO `required` markers
-(tmp / "B.yaml").write_text(
+# The one accepted schema: fields:{<category>:[{name, detail_level}]} with NO `required` markers.
+(tmp / "good_schema.yaml").write_text(
     "fields:\n"
     "  basic:\n"
     "    - {name: a, detail_level: detailed}\n"
@@ -42,6 +35,19 @@ tmp = Path(tempfile.mkdtemp())
     "    - {name: c, detail_level: moderate}\n"
     "    - {name: d, detail_level: moderate}\n"
     "uncertain: []\n", encoding="utf-8")
+# Same shape but with explicit required markers -> opt-in semantics.
+(tmp / "marked_schema.yaml").write_text(
+    "fields:\n"
+    "  basic:\n"
+    "    - {name: a, required: true}\n"
+    "    - {name: b, required: true}\n"
+    "    - {name: notes, required: false}\n", encoding="utf-8")
+# A rejected shape: the old `field_categories:` form.
+(tmp / "bad_schema.yaml").write_text(
+    "field_categories:\n"
+    "  - category: basic\n"
+    "    fields:\n"
+    "      - {name: a}\n", encoding="utf-8")
 (tmp / "good.json").write_text(json.dumps({"a": 1, "b": 1, "c": 1, "d": 1}), encoding="utf-8")
 (tmp / "bad.json").write_text(json.dumps({"a": 1, "b": 1, "c": 1}), encoding="utf-8")  # missing 'd'
 
@@ -65,17 +71,25 @@ for i, path in enumerate(COPIES):
     tag = path.relative_to(ROOT).parts[1]  # e.g. research-en
     m = load(path, i)
 
-    aA, rA, _ = m.load_fields_yaml(tmp / "A.yaml")
-    check(f"[{tag}] Schema A: parses 3, keeps 'notes' optional", aA == {"a", "b", "notes"} and rA == {"a", "b"})
+    # 1. The one accepted schema parses all 4 fields; all required (no markers).
+    a, r, _ = m.load_fields_yaml(tmp / "good_schema.yaml")
+    check(f"[{tag}] good_schema parses 4 fields (was 0 before fix)", a == {"a", "b", "c", "d"})
+    check(f"[{tag}] all required when unmarked (no vacuous pass)", r == a)
 
-    aB, rB, cB = m.load_fields_yaml(tmp / "B.yaml")
-    check(f"[{tag}] Schema B: parses 4 fields (was 0 before fix)", aB == {"a", "b", "c", "d"})
-    check(f"[{tag}] Schema B: all required when unmarked (no vacuous pass)", rB == aB)
+    # 2. Explicit markers preserve opt-in semantics.
+    am, rm, _ = m.load_fields_yaml(tmp / "marked_schema.yaml")
+    check(f"[{tag}] marked_schema: 3 fields, 'notes' optional", am == {"a", "b", "notes"} and rm == {"a", "b"})
 
-    good = m.validate_json(tmp / "good.json", aB, rB, cB)
-    bad = m.validate_json(tmp / "bad.json", aB, rB, cB)
+    # 3. A complete JSON passes; a JSON missing a field actually fails.
+    good = m.validate_json(tmp / "good.json", a, r, _)
+    bad = m.validate_json(tmp / "bad.json", a, r, _)
     check(f"[{tag}] good.json -> valid", good["valid"])
     check(f"[{tag}] bad.json  -> INVALID (catches missing 'd')", (not bad["valid"]) and "d" in bad["missing_required"])
+
+    # 4. A rejected schema shape must make the CLI exit non-zero (run as subprocess).
+    proc = subprocess.run([sys.executable, str(path), "-f", str(tmp / "bad_schema.yaml"), "-d", str(tmp)],
+                          capture_output=True, text=True)
+    check(f"[{tag}] bad_schema (field_categories) is REJECTED (exit != 0)", proc.returncode != 0)
 
 print("\nRESULT:", "ALL PASS" if not fails else f"{len(fails)} FAILED -> {fails}")
 sys.exit(1 if fails else 0)
